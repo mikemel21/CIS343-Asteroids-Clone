@@ -1,5 +1,7 @@
 import pygame as pg
+from pygame.locals import *
 from Player import Player
+from Projectile import Projectile
 
 # Window Size
 WIDTH, HEIGHT = 800, 800
@@ -10,10 +12,12 @@ def main ():
     pg.init()
     screen = pg.display.set_mode((WIDTH, HEIGHT))
     clock = pg.time.Clock()
-
+    # instantiate player object
     player = Player()
+    projectiles = pg.sprite.Group()
 
     delta = 0
+    shotDelta = 500
     FPS = 60
     clock.tick(FPS)
     run = True
@@ -26,26 +30,37 @@ def main ():
         playerMoving = False
         if keys[pg.K_w]:
             playerMoving = True
-            player.forward(delta)
+            player.forward()
         if keys[pg.K_a]:
             player.rotate(screen, "left")
         if keys[pg.K_d]:
             player.rotate(screen, "right")
-
+        if keys[pg.K_SPACE]:
+            if shotDelta >= 0.15:
+                projectile = Projectile(player.rect, player.angle, player.vel)
+                projectiles.add(projectile)
+                shotDelta = 0
         if not playerMoving:
             player.decelerate()
 
-        # update
-        player.update(delta)
-
-        # draw
+        # redraw background
         screen.fill(BG_COLOR)
 
-        player.draw(screen)
+        # update
+        player.update(delta)
+        # update bullets
+        for p in projectiles:
+            p.update(screen)
 
+        player.draw(screen)
+        projectiles.draw(screen)
+
+        # flip buffer
         pg.display.flip()
 
-        delta = clock.tick(FPS)
+        delta = clock.tick(FPS) / 1000.0
+        shotDelta += delta
 
 if __name__ == "__main__":
     main()
+    pg.quit()
