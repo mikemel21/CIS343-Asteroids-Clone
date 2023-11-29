@@ -18,25 +18,54 @@ class Projectile(pg.sprite.Sprite):
         super (Projectile, self).__init__()
         self.__damage = 10
         self.__vel = 15
-        self.__image = pg.image.load(os.path.join('Assets/Player', 'Projectile1.png'))
+        self.image = pg.image.load(os.path.join('Assets/Player', 'Projectile1.png'))
         self.__angle = playerAngle
 
-        self.__rect = self.__image.get_rect()
-        self.__rect.x = playerLocation.x
-        self.__rect.y = playerLocation.y
-        self.__rect.centerx = playerLocation.centerx
-        self.__rect.centery = playerLocation.centery
-
+        self.rect = self.image.get_rect()
+        self.rect.x = playerLocation.x
+        self.rect.y = playerLocation.y
+        self.rect.centerx = playerLocation.centerx
+        self.rect.centery = playerLocation.centery
     @property
-    def damage(self):
-        return self.__damage
+    def image(self):
+        return self._image
+    @property
+    def rect(self):
+        return self._rect
+
+    @image.setter
+    def image(self, value):
+        self._image = value
+    @rect.setter
+    def rect(self, value):
+        self._rect = value
+
+    def check_bounds(self):
+        """Checks if projectile is off the screen; if it is, the projectile location wraps to opposite side. """
+        if self.rect.x > 800:
+            self.rect.x = 0
+        if self.rect.y > 800:
+            self.rect.y = 0
+        if self.rect.x < 0:
+            self.rect.x = 800
+        if self.rect.y < 0:
+            self.rect.y = 800
 
     def draw(self, screen):
-        screen.blit(self.__image, self.__rect)
+        """Redraw the projectile
+        :param screen: display to draw the projectile on; main window
+        """
+        screen.blit(self.image, self.rect)
 
-    def update(self, screen):
+    def update(self):
+        """ Update Projectile position"""
         radians = math.radians(self.__angle)
         vertical = math.cos(radians) * self.__vel
         horizontal = math.sin(radians) * self.__vel
-        self.__rect.x -= horizontal
-        self.__rect.y -= vertical
+        self.rect.x -= horizontal
+        self.rect.y -= vertical
+        self.check_bounds()
+
+
+
+

@@ -102,12 +102,12 @@ class Player(pg.sprite.Sprite):
         :param
             delta: ensures movement speed is independent from FPS
         """
-        self.__vel = min(self.vel + self.__accel, self.__max_vel)
+        self.__vel = min(self.__vel + self.__accel, self.__max_vel)
         # convert angle to radians
         radians = math.radians(self.angle)
         # move in direction based on the angle player is at
-        vertical = math.cos(radians) * self.vel
-        horizontal = math.sin(radians) * self.vel
+        vertical = math.cos(radians) * self.__vel
+        horizontal = math.sin(radians) * self.__vel
 
         # change x and y
         self.__rect.x -= horizontal

@@ -2,6 +2,7 @@ import pygame as pg
 # from pygame.locals import *
 from Player import Player
 from Projectile import Projectile
+import os
 
 # Window Size
 WIDTH, HEIGHT = 800, 800
@@ -12,6 +13,8 @@ def main ():
     pg.init()
     screen = pg.display.set_mode((WIDTH, HEIGHT))
     clock = pg.time.Clock()
+
+    shoot_sound = pg.mixer.Sound(os.path.join("Assets/Audio", "shoot.mp3"))
     # instantiate player object
     player = Player()
     projectiles = pg.sprite.Group()
@@ -37,9 +40,14 @@ def main ():
             player.rotate(screen, "right")
         if keys[pg.K_SPACE]:
             if shotDelta >= 0.15:
+                # play shoot sound
+                pg.mixer.Sound.play(shoot_sound)
+                pg.mixer.music.stop()
+                # instantiate projectile and ad to projectile list
                 projectile = Projectile(player.rect, player.angle)
                 projectiles.add(projectile)
                 shotDelta = 0
+
         if not playerMoving:
             player.decelerate()
 
@@ -50,7 +58,7 @@ def main ():
         player.update(delta)
         # update bullets
         for p in projectiles:
-            p.update(screen)
+            p.update()
         player.draw(screen)
         projectiles.draw(screen)
 
