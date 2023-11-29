@@ -10,72 +10,74 @@ class Player(pg.sprite.Sprite):
     def __init__(self):
         super(Player, self).__init__()
 
-        self.health = 100
-        self.vel = 0.0
-        self.accel = 0.1
-        self.max_vel = 4.0
-        self.rotation_vel = 4.0
+        self.lives = 3
+        self.__vel = 0.0
+        self.__accel = 0.1
+        self.__max_vel = 4.0
+        self.__rotation_vel = 4.0
         self.angle = 0.0
 
         # original image to maintain quality while rotating
         # self.ogImage = pg.image.load(os.path.join('Assets/Player', 'Player_idle.png')).convert_alpha()
-        self.image = pg.image.load(os.path.join('Assets/Player', 'Player_idle.png')).convert_alpha()
+        self.__image = pg.image.load(os.path.join('Assets/Player', 'Player_idle.png')).convert_alpha()
         # rotate player to face up at start
-        self.image = pg.transform.rotate(self.image, 90)
-        self.rect = self.image.get_rect()
-        self.rect.centerx = 400
-        self.rect.centery = 400
+        self.__image = pg.transform.rotate(self.__image, 90)
+        self.__rect = self.__image.get_rect()
+        self.__rect.centerx = 400
+        self.__rect.centery = 400
 
     @property
-    def health (self):
-        return self.__health
-    @property
-    def vel(self):
-        return self.__vel
-    @property
-    def accel(self):
-        return self.__accel
-    @property
-    def max_vel(self):
-        return self.__max_vel
-    @property
-    def rotation_vel(self):
-        return self.__rotation_vel
+    def lives (self):
+        return self.__lives
+    # @property
+    # def vel(self):
+    #     return self.__vel
+    # @property
+    # def accel(self):
+    #     return self.__accel
+    # @property
+    # def max_vel(self):
+    #     return self.__max_vel
+    # @property
+    # def rotation_vel(self):
+    #     return self.__rotation_vel
     @property
     def angle(self):
         return self.__angle
-    @property
-    def image(self):
-        return self.__image
+    # @property
+    # def image(self):
+    #     return self.__image
     @property
     def rect(self):
         return self.__rect
 
-    @health.setter
-    def health(self, hp):
-        if 100 >= hp >= 0:
-            self.__health = hp
-    @vel.setter
-    def vel(self, newVel):
-        self.__vel = newVel
-    @accel.setter
-    def accel(self, newAccel):
-        self.__accel = newAccel
-    @max_vel.setter
-    def max_vel(self, newMax):
-        self.__max_vel = newMax
-    @rotation_vel.setter
-    def rotation_vel(self, newRotVel):
-        self.__rotation_vel = newRotVel
+    @lives.setter
+    def lives(self, lifeAmt):
+        if 3 >= lifeAmt > 0:
+            self.__lives = lifeAmt
+        else:
+            print("invalid health value.")
+    # @vel.setter
+    # def vel(self, newVel):
+    #     self.__vel = newVel
+    # @accel.setter
+    # def accel(self, newAccel):
+    #     self.__accel = newAccel
+    # @max_vel.setter
+    # def max_vel(self, newMax):
+    #     self.__max_vel = newMax
+    # @rotation_vel.setter
+    # def rotation_vel(self, newRotVel):
+    #     self.__rotation_vel = newRotVel
     @angle.setter
     def angle(self, newAngle):
         self.__angle = newAngle
-    @image.setter
-    def image(self, newImg):
-        self.__image = newImg
-    @rect.setter
-    def rect(self, newRect):
-        self.__rect = newRect
+    # @image.setter
+    # def image(self, newImg):
+    #     self.__image = newImg
+    # @rect.setter
+    # def rect(self, newRect):
+    #     self.__rect = newRect
 
     def __blit_rotate(self, screen, top_left, playerAngle):
         """ rotate player image around center axis
@@ -85,9 +87,9 @@ class Player(pg.sprite.Sprite):
         :param playerAngle: The angle the player will be rotated to
         """
         # rotate original image
-        rotatedImage = pg.transform.rotate(self.image, playerAngle)
+        rotatedImage = pg.transform.rotate(self.__image, playerAngle)
         # rotate image without changing x and y positions; rotate around center
-        new_rect = rotatedImage.get_rect(center=self.image.get_rect(topleft = top_left).center)
+        new_rect = rotatedImage.get_rect(center=self.__image.get_rect(topleft = top_left).center)
         screen.blit(rotatedImage, new_rect.topleft)
 
     def draw (self, screen):

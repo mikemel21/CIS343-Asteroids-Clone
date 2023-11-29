@@ -51,7 +51,6 @@ def main ():
         # update bullets
         for p in projectiles:
             p.update(screen)
-
         player.draw(screen)
         projectiles.draw(screen)
 

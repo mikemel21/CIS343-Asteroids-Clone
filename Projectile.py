@@ -30,18 +30,6 @@ class Projectile(pg.sprite.Sprite):
     @property
     def damage(self):
         return self.__damage
-    @property
-    def vel(self):
-        return self.__vel
-    @property
-    def image(self):
-        return self.__image
-    @property
-    def angle(self):
-        return self.__angle
-    @property
-    def rect(self):
-        return self.__rect
 
     def draw(self, screen):
         screen.blit(self.__image, self.__rect)
