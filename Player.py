@@ -10,12 +10,13 @@ class Player(pg.sprite.Sprite):
     def __init__(self):
         super(Player, self).__init__()
 
-        self.lives = 3
+        # self.lives = 3
+        self.score = 0
+        self.angle = 0.0
         self.__vel = 0.0
         self.__accel = 0.1
         self.__max_vel = 4.0
         self.__rotation_vel = 4.0
-        self.angle = 0.0
 
         # original image to maintain quality while rotating
         # self.ogImage = pg.image.load(os.path.join('Assets/Player', 'Player_idle.png')).convert_alpha()
@@ -26,9 +27,15 @@ class Player(pg.sprite.Sprite):
         self.__rect.centerx = 400
         self.__rect.centery = 400
 
+    # @property
+    # def lives(self):
+    #     return self.__lives
     @property
-    def lives (self):
-        return self.__lives
+    def angle(self):
+        return self.__angle
+    @property
+    def rect(self):
+        return self.__rect
     # @property
     # def vel(self):
     #     return self.__vel
@@ -41,22 +48,21 @@ class Player(pg.sprite.Sprite):
     # @property
     # def rotation_vel(self):
     #     return self.__rotation_vel
-    @property
-    def angle(self):
-        return self.__angle
+
     # @property
     # def image(self):
     #     return self.__image
-    @property
-    def rect(self):
-        return self.__rect
 
-    @lives.setter
-    def lives(self, lifeAmt):
-        if 3 >= lifeAmt > 0:
-            self.__lives = lifeAmt
-        else:
-            print("invalid health value.")
+    # @lives.setter
+    # def lives(self, lifeAmt):
+    #     if 3 >= lifeAmt > 0:
+    #         self.__lives = lifeAmt
+    #     else:
+    #         print("invalid health value.")
+    @angle.setter
+    def angle(self, newAngle):
+        self.__angle = newAngle
+
     # @vel.setter
     # def vel(self, newVel):
     #     self.__vel = newVel
@@ -69,9 +75,6 @@ class Player(pg.sprite.Sprite):
     # @rotation_vel.setter
     # def rotation_vel(self, newRotVel):
     #     self.__rotation_vel = newRotVel
-    @angle.setter
-    def angle(self, newAngle):
-        self.__angle = newAngle
     # @image.setter
     # def image(self, newImg):
     #     self.__image = newImg

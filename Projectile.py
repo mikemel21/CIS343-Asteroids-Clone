@@ -28,17 +28,17 @@ class Projectile(pg.sprite.Sprite):
         self.rect.centery = playerLocation.centery
     @property
     def image(self):
-        return self._image
+        return self.__image
     @property
     def rect(self):
-        return self._rect
+        return self.__rect
 
     @image.setter
     def image(self, value):
-        self._image = value
+        self.__image = value
     @rect.setter
     def rect(self, value):
-        self._rect = value
+        self.__rect = value
 
     def check_bounds(self):
         """Checks if projectile is off the screen; if it is, the projectile location wraps to opposite side. """

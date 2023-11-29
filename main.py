@@ -1,26 +1,36 @@
 import pygame as pg
-# from pygame.locals import *
+import pygame.freetype
+from pygame.locals import *
+import os
 from Player import Player
 from Projectile import Projectile
-import os
+from GUI import GUI
 
 # Window Size
 WIDTH, HEIGHT = 800, 800
+# colors
 BG_COLOR = (0, 0, 0)
 
-def main ():
+
+def main():
     # Initialize pygame
     pg.init()
     screen = pg.display.set_mode((WIDTH, HEIGHT))
     clock = pg.time.Clock()
 
+    # Sound setup
     shoot_sound = pg.mixer.Sound(os.path.join("Assets/Audio", "shoot.mp3"))
+
     # instantiate player object
     player = Player()
+    gui = GUI()
+    # score = 0
+    # create sprite group for projectiles
     projectiles = pg.sprite.Group()
 
     delta = 0
     shotDelta = 500
+    asteroidSpawnDelta = 500
     FPS = 60
     clock.tick(FPS)
     run = True
@@ -59,6 +69,9 @@ def main ():
         # update bullets
         for p in projectiles:
             p.update()
+
+        gui.draw_score(screen)
+        gui.draw_lives(screen)
         player.draw(screen)
         projectiles.draw(screen)
 
@@ -67,6 +80,8 @@ def main ():
 
         delta = clock.tick(FPS) / 1000.0
         shotDelta += delta
+        asteroidSpawnDelta += delta
+
 
 if __name__ == "__main__":
     main()
