@@ -1,5 +1,5 @@
 import pygame as pg
-from pygame.locals import *
+# from pygame.locals import *
 from Player import Player
 from Projectile import Projectile
 
@@ -37,7 +37,7 @@ def main ():
             player.rotate(screen, "right")
         if keys[pg.K_SPACE]:
             if shotDelta >= 0.15:
-                projectile = Projectile(player.rect, player.angle, player.vel)
+                projectile = Projectile(player.rect, player.angle)
                 projectiles.add(projectile)
                 shotDelta = 0
         if not playerMoving:
