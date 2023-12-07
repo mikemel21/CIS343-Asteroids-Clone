@@ -26,16 +26,23 @@ class Player(pg.sprite.Sprite):
         self.__rect = self.__image.get_rect()
         self.__rect.centerx = 400
         self.__rect.centery = 400
+        self.__playerMask = pg.mask.from_surface(self.__image)
 
     # @property
     # def lives(self):
     #     return self.__lives
+    @property
+    def image(self):
+        return self.__image
     @property
     def angle(self):
         return self.__angle
     @property
     def rect(self):
         return self.__rect
+    @property
+    def playerMask(self):
+        return self.__playerMask
 
     @angle.setter
     def angle(self, newAngle):
@@ -100,6 +107,9 @@ class Player(pg.sprite.Sprite):
         # rotate right
         elif rotDir == "right":
             self.__angle -= self.__rotation_vel
+
+    def die(self):
+        self.kill()
 
     def update(self, delta):
         pass

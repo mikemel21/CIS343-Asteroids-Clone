@@ -52,11 +52,11 @@ class Asteroid(pg.sprite.Sprite):
         self.__rect.x += self.speed * math.cos(self.angle)
         self.__rect.y += self.speed * math.sin(self.angle)
 
-        if self.__rect.centerx > 850:
-            self.__rect.centerx = 0
-        if self.__rect.centery > 850:
-            self.__rect.centery = 0
-        if self.__rect.centerx < -10:
-            self.__rect.centerx = 800
-        if self.__rect.centery < -10:
-            self.__rect.centery = 800
+        # if self.__rect.centerx > 850:
+        #     self.__rect.centerx = 0
+        # if self.__rect.centery > 850:
+        #     self.__rect.centery = 0
+        # if self.__rect.centerx < -10:
+        #     self.__rect.centerx = 800
+        # if self.__rect.centery < -10:
+        #     self.__rect.centery = 800

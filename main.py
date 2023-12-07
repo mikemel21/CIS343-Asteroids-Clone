@@ -1,3 +1,6 @@
+import random
+import time
+
 import pygame as pg
 import pygame.freetype
 from pygame.locals import *
@@ -24,7 +27,9 @@ def main():
     # instantiate player object
     player = Player()
     gui = GUI()
-    # score = 0
+    allObjects = pg.sprite.Group()
+    allObjects.add(player)
+
     # Projectile Sprite Group
     projectiles = pg.sprite.Group()
     # Asteroid Sprite Group
@@ -32,14 +37,12 @@ def main():
 
     # spawn starter asteroids
     asteroidBig = AsteroidLarge()
-    # asteroidSmall = Asteroid("small", 100, 80)
     asteroids.add(asteroidBig)
-    # asteroids.add(asteroidSmall)
 
+    playerCollided = False
     delta = 0
     shotDelta = 500
     spawnTimer = 1
-    asteroidSpawnDelta = 500
     FPS = 60
     clock.tick(FPS)
     run = True
@@ -70,10 +73,21 @@ def main():
         if not playerMoving:
             player.decelerate()
 
+        spawnTimer -= delta
+        if spawnTimer <= 0:
+            # asteroid = random.choices(AsteroidLarge(), AsteroidMedium(), AsteroidSmall())
+            asteroid = AsteroidLarge()
+            asteroids.add(asteroid)
+            spawnTimer = 2
+
         # redraw background
         screen.fill(BG_COLOR)
         
-        # check for collisions between projectile and asteroid
+        # check for collisions between player and asteroid
+        if pg.sprite.spritecollide(player, asteroids, dokill=False) and not playerCollided:
+            playerCollided = True
+
+        # check for collision between projectile and asteroid
         for p in projectiles:
             for a in asteroids:
                 if p.projectileMask.overlap(a.asteroidMask, (a.rect.x - p.rect.x, a.rect.y - p.rect.y)):
@@ -83,21 +97,10 @@ def main():
 
         # update
         player.update(delta)
-
-        # update asteroids
         asteroids.update()
-
-        # update bullets
         projectiles.update()
 
-        # for p in projectiles:
-        #     # check for projectile collision with asteroid
-        #     for a in asteroids:
-        #         if p.rect.colliderect(a.rect):
-        #             a.explode()
-        #             gui.update_score(a.scorePoints())
-        #     p.update()
-
+        # redraw objects
         gui.draw_score(screen)
         gui.draw_lives(screen)
         player.draw(screen)
@@ -109,7 +112,6 @@ def main():
 
         delta = clock.tick(FPS) / 1000.0
         shotDelta += delta
-        asteroidSpawnDelta += delta
 
 
 if __name__ == "__main__":

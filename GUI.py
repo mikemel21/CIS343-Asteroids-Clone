@@ -49,5 +49,5 @@ class GUI:
         """
         self.__score += points
 
-    def update_lives(self, life):
-        pass
+    def update_lives(self, change):
+        self.__lives += change
