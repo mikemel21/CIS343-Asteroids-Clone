@@ -8,14 +8,16 @@ class Asteroid(pg.sprite.Sprite):
         super(Asteroid, self).__init__()
 
         self.__size = size
-        self.__image = self.loadImage()
+        # self.__image = self.loadImage()
+        self.__image = pg.image.load(os.path.join('Assets', 'Asteroid.png')).convert_alpha()
+        self.__image = pg.transform.scale(self.__image, (size, size))
         self.__rect = self.__image.get_rect()
         self.__asteroidMask = pg.mask.from_surface(self.__image)
 
-        self.__rect.x = random.choice([-5, 850])
-        self.__rect.y = random.choice([0, 800])
-        self.speed = random.uniform(1, 3)
-        self.angle = math.atan2(800 / 2 - self.__rect.y, 800 / 2 - self.rect.x)
+        self.__rect.x = random.choice([-self.__size, 850])
+        self.__rect.y = random.choice([-self.__size, 850])
+        self.__speed = random.uniform(1, 3)
+        self.__angle = math.atan2(800 / 2 - self.__rect.y, 800 / 2 - self.rect.x)
 
     @property
     def image(self):
@@ -41,22 +43,19 @@ class Asteroid(pg.sprite.Sprite):
         screen.blit(self.__image, self.__rect)
 
     def scorePoints(self):
-        if self.__size == "large":
+        if self.__size == 160:
             return 20
-        elif self.__size == "medium":
+        elif self.__size == 96:
             return 50
-        elif self.__size == "small":
+        elif self.__size == 64:
             return 100
+        # if self.__size == "large":
+        #     return 20
+        # elif self.__size == "medium":
+        #     return 50
+        # elif self.__size == "small":
+        #     return 100
 
     def update(self):
-        self.__rect.x += self.speed * math.cos(self.angle)
-        self.__rect.y += self.speed * math.sin(self.angle)
-
-        # if self.__rect.centerx > 850:
-        #     self.__rect.centerx = 0
-        # if self.__rect.centery > 850:
-        #     self.__rect.centery = 0
-        # if self.__rect.centerx < -10:
-        #     self.__rect.centerx = 800
-        # if self.__rect.centery < -10:
-        #     self.__rect.centery = 800
+        self.__rect.x += self.__speed * math.cos(self.__angle)
+        self.__rect.y += self.__speed * math.sin(self.__angle)

@@ -9,6 +9,8 @@ from Player import Player
 from Projectile import Projectile
 from GUI import GUI
 from AsteroidLarge import AsteroidLarge
+from AsteroidMedium import AsteroidMedium
+from AsteroidSmall import AsteroidSmall
 from GameManager import GameManager
 
 # Window Size
@@ -40,6 +42,7 @@ def main():
     # spawn starter asteroids
     asteroidBig = AsteroidLarge()
     asteroids.add(asteroidBig)
+    asteroidOptions = [AsteroidLarge(), AsteroidMedium(), AsteroidSmall()]
 
     playerCollided = False
     playerResetTimer = 0
@@ -81,23 +84,22 @@ def main():
 
         spawnTimer -= delta
         if spawnTimer <= 0:
-            # asteroid = random.choices(AsteroidLarge(), AsteroidMedium(), AsteroidSmall())
-            asteroid = AsteroidLarge()
+            asteroid = random.choice(asteroidOptions)
             asteroids.add(asteroid)
+            print(str(asteroid.rect.x) + " X " + str(asteroid.rect.y))
             spawnTimer = 2
-
-        # redraw background
-        screen.fill(BG_COLOR)
 
         # check for collisions between player and asteroid
         if player and pg.sprite.spritecollide(player, asteroids, False) and not playerCollided:
             playerCollided = True
             gm.decreaseLife()
             # gui.update_lives(-1)
+            pg.mixer.Sound.play(pg.mixer.Sound(os.path.join("Assets/Audio", "playerExplosion.mp3")))
             # kill player
             player = None
             # start reset timer
             playerResetTimer = pg.time.get_ticks()
+
         # check if enough time has passed for player to spawn
         if playerResetTimer > 0 and pg.time.get_ticks() - playerResetTimer >= playerResetDuration:
             # reset player
@@ -114,7 +116,11 @@ def main():
                     p.kill()
                     a.kill()
                     gm.increaseScore(a.scorePoints())
+                    pg.mixer.Sound.play(pg.mixer.Sound(os.path.join("Assets/Audio", "asteroidExplosion.mp3")))
                     # gui.update_score(a.scorePoints())
+
+        # redraw background
+        screen.fill(BG_COLOR)
 
         # update
         if player:
