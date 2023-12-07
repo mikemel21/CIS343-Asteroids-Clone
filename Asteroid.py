@@ -7,7 +7,6 @@ class Asteroid(pg.sprite.Sprite):
         super(Asteroid, self).__init__()
 
         self.__size = size
-        # self.__image = self.loadImage()
         self.__image = self.loadImage()
         self.__rect = self.__image.get_rect()
 
@@ -38,7 +37,7 @@ class Asteroid(pg.sprite.Sprite):
 
     def loadImage(self):
         if self.__size == "large":
-            return pg.image.load(os.path.join('Assets/Asteroid-Large', 'Asteroid_large1.png')).convert_alpha()
+            return pg.image.load(os.path.join('Assets/Asteroid-Large', 'Asteroid_large1.png'))
         elif self.__size == "medium":
             return pg.image.load(os.path.join('Assets/Asteroid-Medium', 'Asteroid_medium1.png')).convert_alpha()
         elif self.__size == "small":
@@ -51,8 +50,16 @@ class Asteroid(pg.sprite.Sprite):
         self.__rect.x += self.__xvel
         self.__rect.y += self.__yvel
 
-    def update(self):
-        pass
-
     def explode(self):
+        self.kill()
+
+    def scorePoints(self):
+        if self.__size == "large":
+            return 20
+        elif self.__size == "medium":
+            return 50
+        elif self.__size == "small":
+            return 100
+
+    def update(self):
         pass

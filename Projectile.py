@@ -18,7 +18,7 @@ class Projectile(pg.sprite.Sprite):
         super (Projectile, self).__init__()
         self.__damage = 10
         self.__vel = 15
-        self.image = pg.image.load(os.path.join('Assets/Player', 'Projectile1.png'))
+        self.__image = pg.image.load(os.path.join('Assets/Player', 'Projectile1.png'))
         self.__angle = playerAngle
 
         self.rect = self.image.get_rect()

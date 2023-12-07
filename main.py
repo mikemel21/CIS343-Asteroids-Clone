@@ -12,7 +12,6 @@ WIDTH, HEIGHT = 800, 800
 # colors
 BG_COLOR = (0, 0, 0)
 
-
 def main():
     # Initialize pygame
     pg.init()
@@ -71,27 +70,35 @@ def main():
         if not playerMoving:
             player.decelerate()
 
-        # Asteroid spawning
-        spawnTimer -= delta
-        # if spawnTimer <= 0:
-        #     asteroid = Asteroid("large", (10, 10))
-        #     asteroids.add(asteroid)
-
         # redraw background
         screen.fill(BG_COLOR)
 
         for a in asteroids:
             a.move()
 
-        # update
-        player.update(delta)
-        # update bullets
+        # check for collisions between projectile and asteroid
         for p in projectiles:
-            # check for projectile collision with asteroid
             for a in asteroids:
                 if p.rect.colliderect(a.rect):
-                    print("collision")
-            p.update()
+                    a.explode()
+                    gui.update_score(a.scorePoints())
+
+        # update
+        player.update(delta)
+
+        # update asteroids
+        asteroids.update()
+
+        # update bullets
+        projectiles.update()
+
+        # for p in projectiles:
+        #     # check for projectile collision with asteroid
+        #     for a in asteroids:
+        #         if p.rect.colliderect(a.rect):
+        #             a.explode()
+        #             gui.update_score(a.scorePoints())
+        #     p.update()
 
         gui.draw_score(screen)
         gui.draw_lives(screen)
