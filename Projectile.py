@@ -21,12 +21,16 @@ class Projectile(pg.sprite.Sprite):
         self.__image = pg.image.load(os.path.join('Assets/Player', 'Projectile1.png'))
         self.__angle = playerAngle
         self.__projectileMask = pg.mask.from_surface(self.__image)
+        # create time limit for projectile existence
+        self.__lifetime = 1
+        self.__creation_time = pg.time.get_ticks() / 1000
 
         self.rect = self.image.get_rect()
         self.rect.x = playerLocation.x
         self.rect.y = playerLocation.y
         self.rect.centerx = playerLocation.centerx
         self.rect.centery = playerLocation.centery
+
     @property
     def image(self):
         return self.__image
@@ -43,6 +47,17 @@ class Projectile(pg.sprite.Sprite):
     @rect.setter
     def rect(self, value):
         self.__rect = value
+
+    def checkLifeTime(self):
+        """ Check how long the projectile has existed
+
+        Remove projectile if it has exceeded existence time limit
+        :return: True (if lifetime is reached)
+        """
+        cur = pg.time.get_ticks() / 1000
+        if cur - self.__creation_time > self.__lifetime:
+            return True
+        return False
 
     def check_bounds(self):
         """Checks if projectile is off the screen; if it is, the projectile location wraps to opposite side. """

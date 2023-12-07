@@ -3,11 +3,12 @@ from pygame import freetype
 import os
 
 class GUI:
-    def __init__(self):
+    def __init__(self, gamemanager):
         pg.freetype.init()
+        pg.display.set_caption("Asteroids")
+        pg.display.set_icon(pg.image.load(os.path.join("Assets", "icon.jpg")))
 
-        self.__score = 0
-        self.__lives = 3
+        self.gm = gamemanager
 
         # Font setup
         self.__font_path = os.path.join("Assets", "AsteroidsFont.ttf")
@@ -23,7 +24,7 @@ class GUI:
     def draw_score(self, screen):
         """ Displays the score at the top left of the screen
         """
-        self.__font.render_to(screen, (10, 10), "Score: " + str(self.__score), self.__font_color, None,
+        self.__font.render_to(screen, (10, 10), "Score: " + str(self.gm.score), self.__font_color, None,
                               size=self.__font_size)
         self.__font.render_to(screen, (10, 50), "Lives: ", self.__font_color, None,
                               size=self.__font_size)
@@ -36,18 +37,18 @@ class GUI:
 
         offset = 0
         i = 0
-        while i < self.__lives:
+        while i < self.gm.lives:
             screen.blit(self.__lives_image, (120 + offset, 40))
             offset += 45
             i += 1
-
-    def update_score(self, points):
-        """ Updates point value
-        update_score is called whenever a player destroys an asteroid
-
-        :param points:
-        """
-        self.__score += points
-
-    def update_lives(self, change):
-        self.__lives += change
+    #
+    # def update_score(self, points):
+    #     """ Updates point value
+    #     update_score is called whenever a player destroys an asteroid
+    #
+    #     :param points:
+    #     """
+    #     self.__score += points
+    #
+    # def update_lives(self, change):
+    #     self.__lives += change

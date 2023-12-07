@@ -9,6 +9,7 @@ from Player import Player
 from Projectile import Projectile
 from GUI import GUI
 from AsteroidLarge import AsteroidLarge
+from GameManager import GameManager
 
 # Window Size
 WIDTH, HEIGHT = 800, 800
@@ -26,7 +27,8 @@ def main():
 
     # instantiate player object
     player = Player()
-    gui = GUI()
+    gm = GameManager()
+    gui = GUI(gm)
     allObjects = pg.sprite.Group()
     allObjects.add(player)
 
@@ -90,7 +92,8 @@ def main():
         # check for collisions between player and asteroid
         if player and pg.sprite.spritecollide(player, asteroids, False) and not playerCollided:
             playerCollided = True
-            gui.update_lives(-1)
+            gm.decreaseLife()
+            # gui.update_lives(-1)
             # kill player
             player = None
             # start reset timer
@@ -104,11 +107,14 @@ def main():
 
         # check for collision between projectile and asteroid
         for p in projectiles:
+            if p.checkLifeTime():
+                projectiles.remove(p)
             for a in asteroids:
                 if p.projectileMask.overlap(a.asteroidMask, (a.rect.x - p.rect.x, a.rect.y - p.rect.y)):
                     p.kill()
                     a.kill()
-                    gui.update_score(a.scorePoints())
+                    gm.increaseScore(a.scorePoints())
+                    # gui.update_score(a.scorePoints())
 
         # update
         if player:
