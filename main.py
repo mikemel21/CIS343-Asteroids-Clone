@@ -40,6 +40,9 @@ def main():
     asteroids.add(asteroidBig)
 
     playerCollided = False
+    playerResetTimer = 0
+    playerResetDuration = 3000
+
     delta = 0
     shotDelta = 500
     spawnTimer = 1
@@ -53,25 +56,26 @@ def main():
         # player movement
         keys = pg.key.get_pressed()
         playerMoving = False
-        if keys[pg.K_w]:
-            playerMoving = True
-            player.forward()
-        if keys[pg.K_a]:
-            player.rotate(screen, "left")
-        if keys[pg.K_d]:
-            player.rotate(screen, "right")
-        if keys[pg.K_SPACE]:
-            if shotDelta >= 0.15:
-                # play shoot sound
-                pg.mixer.Sound.play(shoot_sound)
-                pg.mixer.music.stop()
-                # instantiate projectile and ad to projectile list
-                projectile = Projectile(player.rect, player.angle)
-                projectiles.add(projectile)
-                shotDelta = 0
+        if player:
+            if keys[pg.K_w]:
+                playerMoving = True
+                player.forward()
+            if keys[pg.K_a]:
+                player.rotate(screen, "left")
+            if keys[pg.K_d]:
+                player.rotate(screen, "right")
+            if keys[pg.K_SPACE]:
+                if shotDelta >= 0.15:
+                    # play shoot sound
+                    pg.mixer.Sound.play(shoot_sound)
+                    pg.mixer.music.stop()
+                    # instantiate projectile and ad to projectile list
+                    projectile = Projectile(player.rect, player.angle)
+                    projectiles.add(projectile)
+                    shotDelta = 0
 
-        if not playerMoving:
-            player.decelerate()
+            if not playerMoving:
+                player.decelerate()
 
         spawnTimer -= delta
         if spawnTimer <= 0:
@@ -82,10 +86,21 @@ def main():
 
         # redraw background
         screen.fill(BG_COLOR)
-        
+
         # check for collisions between player and asteroid
-        if pg.sprite.spritecollide(player, asteroids, dokill=False) and not playerCollided:
+        if player and pg.sprite.spritecollide(player, asteroids, False) and not playerCollided:
             playerCollided = True
+            gui.update_lives(-1)
+            # kill player
+            player = None
+            # start reset timer
+            playerResetTimer = pg.time.get_ticks()
+        # check if enough time has passed for player to spawn
+        if playerResetTimer > 0 and pg.time.get_ticks() - playerResetTimer >= playerResetDuration:
+            # reset player
+            player = Player()
+            playerResetTimer = 0
+            playerCollided = False
 
         # check for collision between projectile and asteroid
         for p in projectiles:
@@ -96,14 +111,16 @@ def main():
                     gui.update_score(a.scorePoints())
 
         # update
-        player.update(delta)
+        if player:
+            player.update(delta)
         asteroids.update()
         projectiles.update()
 
         # redraw objects
         gui.draw_score(screen)
         gui.draw_lives(screen)
-        player.draw(screen)
+        if player:
+            player.draw(screen)
         projectiles.draw(screen)
         asteroids.draw(screen)
 
@@ -112,7 +129,6 @@ def main():
 
         delta = clock.tick(FPS) / 1000.0
         shotDelta += delta
-
 
 if __name__ == "__main__":
     main()
