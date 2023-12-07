@@ -1,3 +1,4 @@
+import math
 import random
 import pygame as pg
 import os
@@ -9,23 +10,12 @@ class Asteroid(pg.sprite.Sprite):
         self.__size = size
         self.__image = self.loadImage()
         self.__rect = self.__image.get_rect()
+        self.__asteroidMask = pg.mask.from_surface(self.__image)
 
-        self.__ranPoint = random.choice([(random.randrange(0, 800 - self.__rect.width),
-                                          random.choice([-1 * self.__rect.height - 5, 800 + 5])),
-                                         (random.choice([-1 * self.__rect.width - 5, 800 + 5]),
-                                          random.randrange(0, 800 - self.__rect.height))])
-        self.__rect.x, self.__rect.y = self.__ranPoint
-        if self.__rect.x < 800 // 2:
-            self.__xdir = 1
-        else:
-            self.__xdir = -1
-
-        if self.__rect.y < 800 // 2:
-            self.__ydir = 1
-        else:
-            self.__ydir = -1
-        self.__xvel = self.__xdir * random.randrange(1, 3)
-        self.__yvel = self.__ydir * random.randrange(1, 3)
+        self.__rect.x = random.choice([-5, 850])
+        self.__rect.y = random.choice([0, 800])
+        self.speed = random.uniform(1, 3)
+        self.angle = math.atan2(800 / 2 - self.__rect.y, 800 / 2 - self.rect.x)
 
     @property
     def image(self):
@@ -35,9 +25,13 @@ class Asteroid(pg.sprite.Sprite):
     def rect(self):
         return self.__rect
 
+    @property
+    def asteroidMask(self):
+        return self.__asteroidMask
+
     def loadImage(self):
         if self.__size == "large":
-            return pg.image.load(os.path.join('Assets/Asteroid-Large', 'Asteroid_large1.png'))
+            return pg.image.load(os.path.join('Assets/Asteroid-Large', 'Asteroid_large1.png')).convert_alpha()
         elif self.__size == "medium":
             return pg.image.load(os.path.join('Assets/Asteroid-Medium', 'Asteroid_medium1.png')).convert_alpha()
         elif self.__size == "small":
@@ -45,13 +39,6 @@ class Asteroid(pg.sprite.Sprite):
 
     def draw(self, screen):
         screen.blit(self.__image, self.__rect)
-
-    def move(self):
-        self.__rect.x += self.__xvel
-        self.__rect.y += self.__yvel
-
-    def explode(self):
-        self.kill()
 
     def scorePoints(self):
         if self.__size == "large":
@@ -62,4 +49,14 @@ class Asteroid(pg.sprite.Sprite):
             return 100
 
     def update(self):
-        pass
+        self.__rect.x += self.speed * math.cos(self.angle)
+        self.__rect.y += self.speed * math.sin(self.angle)
+
+        if self.__rect.centerx > 850:
+            self.__rect.centerx = 0
+        if self.__rect.centery > 850:
+            self.__rect.centery = 0
+        if self.__rect.centerx < -10:
+            self.__rect.centerx = 800
+        if self.__rect.centery < -10:
+            self.__rect.centery = 800

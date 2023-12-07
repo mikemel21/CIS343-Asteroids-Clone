@@ -72,15 +72,13 @@ def main():
 
         # redraw background
         screen.fill(BG_COLOR)
-
-        for a in asteroids:
-            a.move()
-
+        
         # check for collisions between projectile and asteroid
         for p in projectiles:
             for a in asteroids:
-                if p.rect.colliderect(a.rect):
-                    a.explode()
+                if p.projectileMask.overlap(a.asteroidMask, (a.rect.x - p.rect.x, a.rect.y - p.rect.y)):
+                    p.kill()
+                    a.kill()
                     gui.update_score(a.scorePoints())
 
         # update

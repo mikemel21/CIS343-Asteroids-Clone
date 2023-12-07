@@ -20,6 +20,7 @@ class Projectile(pg.sprite.Sprite):
         self.__vel = 15
         self.__image = pg.image.load(os.path.join('Assets/Player', 'Projectile1.png'))
         self.__angle = playerAngle
+        self.__projectileMask = pg.mask.from_surface(self.__image)
 
         self.rect = self.image.get_rect()
         self.rect.x = playerLocation.x
@@ -32,6 +33,9 @@ class Projectile(pg.sprite.Sprite):
     @property
     def rect(self):
         return self.__rect
+    @property
+    def projectileMask(self):
+        return self.__projectileMask
 
     @image.setter
     def image(self, value):
