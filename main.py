@@ -5,6 +5,7 @@ import os
 from Player import Player
 from Projectile import Projectile
 from GUI import GUI
+from AsteroidLarge import AsteroidLarge
 
 # Window Size
 WIDTH, HEIGHT = 800, 800
@@ -25,11 +26,20 @@ def main():
     player = Player()
     gui = GUI()
     # score = 0
-    # create sprite group for projectiles
+    # Projectile Sprite Group
     projectiles = pg.sprite.Group()
+    # Asteroid Sprite Group
+    asteroids = pg.sprite.Group()
+
+    # spawn starter asteroids
+    asteroidBig = AsteroidLarge()
+    # asteroidSmall = Asteroid("small", 100, 80)
+    asteroids.add(asteroidBig)
+    # asteroids.add(asteroidSmall)
 
     delta = 0
     shotDelta = 500
+    spawnTimer = 1
     asteroidSpawnDelta = 500
     FPS = 60
     clock.tick(FPS)
@@ -61,19 +71,33 @@ def main():
         if not playerMoving:
             player.decelerate()
 
+        # Asteroid spawning
+        spawnTimer -= delta
+        # if spawnTimer <= 0:
+        #     asteroid = Asteroid("large", (10, 10))
+        #     asteroids.add(asteroid)
+
         # redraw background
         screen.fill(BG_COLOR)
+
+        for a in asteroids:
+            a.move()
 
         # update
         player.update(delta)
         # update bullets
         for p in projectiles:
+            # check for projectile collision with asteroid
+            for a in asteroids:
+                if p.rect.colliderect(a.rect):
+                    print("collision")
             p.update()
 
         gui.draw_score(screen)
         gui.draw_lives(screen)
         player.draw(screen)
         projectiles.draw(screen)
+        asteroids.draw(screen)
 
         # flip buffer
         pg.display.flip()

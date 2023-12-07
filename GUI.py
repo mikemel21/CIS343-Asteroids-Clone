@@ -48,3 +48,6 @@ class GUI:
         :param points:
         """
         self.__score += points
+
+    def update_lives(self, life):
+        pass

@@ -36,51 +36,10 @@ class Player(pg.sprite.Sprite):
     @property
     def rect(self):
         return self.__rect
-    # @property
-    # def vel(self):
-    #     return self.__vel
-    # @property
-    # def accel(self):
-    #     return self.__accel
-    # @property
-    # def max_vel(self):
-    #     return self.__max_vel
-    # @property
-    # def rotation_vel(self):
-    #     return self.__rotation_vel
 
-    # @property
-    # def image(self):
-    #     return self.__image
-
-    # @lives.setter
-    # def lives(self, lifeAmt):
-    #     if 3 >= lifeAmt > 0:
-    #         self.__lives = lifeAmt
-    #     else:
-    #         print("invalid health value.")
     @angle.setter
     def angle(self, newAngle):
         self.__angle = newAngle
-
-    # @vel.setter
-    # def vel(self, newVel):
-    #     self.__vel = newVel
-    # @accel.setter
-    # def accel(self, newAccel):
-    #     self.__accel = newAccel
-    # @max_vel.setter
-    # def max_vel(self, newMax):
-    #     self.__max_vel = newMax
-    # @rotation_vel.setter
-    # def rotation_vel(self, newRotVel):
-    #     self.__rotation_vel = newRotVel
-    # @image.setter
-    # def image(self, newImg):
-    #     self.__image = newImg
-    # @rect.setter
-    # def rect(self, newRect):
-    #     self.__rect = newRect
 
     def __blit_rotate(self, screen, top_left, playerAngle):
         """ rotate player image around center axis
