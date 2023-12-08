@@ -108,8 +108,12 @@ class Player(pg.sprite.Sprite):
         elif rotDir == "right":
             self.__angle -= self.__rotation_vel
 
-    def die(self):
-        self.kill()
-
     def update(self, delta):
-        pass
+        if self.rect.x > 800:
+            self.rect.x = 0
+        if self.rect.y > 800:
+            self.rect.y = 0
+        if self.rect.x < 0:
+            self.rect.x = 800
+        if self.rect.y < 0:
+            self.rect.y = 800

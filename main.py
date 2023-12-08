@@ -58,6 +58,7 @@ def main():
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 run = False
+
         # player movement
         keys = pg.key.get_pressed()
         playerMoving = False
@@ -86,7 +87,6 @@ def main():
         if spawnTimer <= 0:
             asteroid = random.choice(asteroidOptions)
             asteroids.add(asteroid)
-            print(str(asteroid.rect.x) + " X " + str(asteroid.rect.y))
             spawnTimer = 2
 
         # check for collisions between player and asteroid
