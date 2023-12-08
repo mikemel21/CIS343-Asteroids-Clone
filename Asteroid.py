@@ -9,15 +9,14 @@ class Asteroid(pg.sprite.Sprite):
 
         self.__size = size
         # self.__image = self.loadImage()
-        self.__image = pg.image.load(os.path.join('Assets', 'Asteroid.png')).convert_alpha()
+        self.__image = pg.image.load(os.path.join('Assets', 'Asteroid.png'))
         self.__image = pg.transform.scale(self.__image, (size, size))
         self.__rect = self.__image.get_rect()
         self.__asteroidMask = pg.mask.from_surface(self.__image)
 
-        self.__rect.x = random.choice([-self.__size, 850])
-        self.__rect.y = random.choice([-self.__size, 850])
-        self.__speed = random.uniform(1, 3)
-        self.__angle = math.atan2(800 / 2 - self.__rect.y, 800 / 2 - self.rect.x)
+        self.__rect.x = random.randint(-5, 805)
+        self.__rect.y = random.randint(-5, 805)
+        self.__speed = random.randint(1, 3)
 
     @property
     def image(self):
@@ -57,5 +56,7 @@ class Asteroid(pg.sprite.Sprite):
         #     return 100
 
     def update(self):
-        self.__rect.x += self.__speed * math.cos(self.__angle)
-        self.__rect.y += self.__speed * math.sin(self.__angle)
+        # self.__rect.x += self.__speed * math.cos(self.__angle)
+        # self.__rect.y += self.__speed * math.sin(self.__angle)
+        self.__rect.x += self.__speed
+        self.__rect.y += self.__speed

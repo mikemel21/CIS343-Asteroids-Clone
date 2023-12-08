@@ -2,6 +2,7 @@ import pygame as pg
 from pygame import freetype
 import os
 
+
 class GUI:
     def __init__(self, gamemanager):
         pg.freetype.init()
@@ -41,14 +42,11 @@ class GUI:
             screen.blit(self.__lives_image, (120 + offset, 40))
             offset += 45
             i += 1
-    #
-    # def update_score(self, points):
-    #     """ Updates point value
-    #     update_score is called whenever a player destroys an asteroid
-    #
-    #     :param points:
-    #     """
-    #     self.__score += points
-    #
-    # def update_lives(self, change):
-    #     self.__lives += change
+
+    def game_over(self, screen):
+        """Displays a game over screen
+        :param screen: main game window
+        """
+        Text = "Game Over"
+        dimensions = self.__font.get_rect(Text)
+        self.__font.render_to(screen, ((800-dimensions.width) // 2, (800 - dimensions.height) // 2), Text, self.__font_color, None, size=self.__font_size)
