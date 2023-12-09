@@ -15,6 +15,12 @@ class Asteroid(pg.sprite.Sprite):
             __image (pg.Surface): The image of the asteroid.
             __rect (pg.Rect): Box for the asteroid's image.
             __asteroidMask (pg.Mask): Mask used for collision detection.
+            __edge: Value chosen by random between "top", "bottom", "left", "right". This randomizes where the asteroids
+                spawn.
+            __x (int): Initial x value for an asteroid
+            __y (int): Initial y value for an asteroid
+            __dirX (int): Initial X direction for an asteroid.
+            __dirY (int): Initial Y direction for an asteroid.
             __speed (int): The speed in which the asteroid moves.
 
     Properties:
@@ -24,18 +30,18 @@ class Asteroid(pg.sprite.Sprite):
             with the asteroid.
 
     Methods:
-        __init__(size, x, y): Initialize asteroid with a given size and initial position coordinates.
+        __init__(size, WIDTH, HEIGHT): Initialize asteroid with a given size and initial position coordinates.
         draw(screen): Draw the asteroid on the specified screen.
         scorePoints(): Return the points scored based on what asteroid type was destroyed.
         update(): Update the position of the asteroid.
     """
-    def __init__(self, size, x, y):
+    def __init__(self, size, WIDTH, HEIGHT):
         """Initializes the Asteroid
 
         Parameters:
             size (int): The size of the asteroid. Used to scale the image to the correct size based on asteroid type.
-            x (int): The x-coordinate of the asteroid's starting position.
-            y (int): The y-coordinate of the asteroid's starting position.
+            WIDTH (int): Width of the game screen.
+            HEIGHT (int): Height of the game screen.
         """
         super(Asteroid, self).__init__()
 
@@ -46,10 +52,27 @@ class Asteroid(pg.sprite.Sprite):
         self.__rect = self.__image.get_rect()
         self.__asteroidMask = pg.mask.from_surface(self.__image)
 
-        self.__rect.center = (x, y)
+        # Determine a random starting edge
+        self.__edge = random.choice(['top', 'bottom', 'left', 'right'])
+        self.__x = 0
+        self.__y = 0
+        # Calculate initial position based on the chosen edge
+        if self.__edge == 'top':
+            self.__x = random.randint(0, WIDTH)
+            self.__y = -30  # Slightly above the top edge
+        elif self.__edge == 'bottom':
+            self.__x = random.randint(0, WIDTH)
+            self.__y = HEIGHT + 30  # Slightly below the bottom edge
+        elif self.__edge == 'left':
+            self.__x = -30  # Slightly to the left of the left edge
+            self.__y = random.randint(0, HEIGHT)
+        elif self.__edge == 'right':
+            self.__x = WIDTH + 30  # Slightly to the right of the right edge
+            self.__y = random.randint(0, HEIGHT)
+
+        self.__rect.center = (self.__x, self.__y)
         self.__dirX = random.uniform(-1, 1)
         self.__dirY = random.uniform(-1, 1)
-
         self.__speed = random.randint(1, 3)
 
     @property
@@ -90,6 +113,15 @@ class Asteroid(pg.sprite.Sprite):
             return 100
 
     def update(self):
-        """Update the position of the asteroid."""
+        """Update the position of the asteroid. If an asteroid is out of bounds, the asteroid position will wrap."""
         self.__rect.x += self.__dirX * self.__speed
         self.__rect.y += self.__dirY * self.__speed
+
+        if self.__rect.centerx < -40:
+            self.__rect.centerx = 805
+        if self.__rect.centerx > 850:
+            self.__rect.centerx = -5
+        if self.__rect.centery < -2:
+            self.__rect.centery = 800
+        if self.__rect.centery > 850:
+            self.__rect.centery = 0

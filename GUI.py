@@ -15,6 +15,9 @@ class GUI:
         __font_size (int): Stores the size of the font.
         __font (Font): Stores the font the GUI will use.
         __font_color (tuple): Stores the RGB value of the color of the font.
+        __WIDTH (int): Stores the screen width
+        __HEIGHT (int): Stores the screen height
+        __lives_image (str): Stores the image that will display the lives
 
     Methods:
         __init__(gamemanager): Initialize the GUI
@@ -22,10 +25,13 @@ class GUI:
         draw_lives(screen): Displays the player's lives directly under the score.
         game_over(screen): Displays the "game over" display when the player dies.
     """
-    def __init__(self, gamemanager):
+    def __init__(self, gamemanager, WIDTH, HEIGHT):
         """ Initializes the GUI
 
-        :param gamemanager: The Gamemanager instance in order to display the current score and lives.
+        Parameters:
+            gamemanager: The Gamemanager instance in order to display the current score and lives.
+            WIDTH (int): The width of the main screen
+            HEIGHT (int): The height of the main screen
         """
         pg.freetype.init()
         pg.display.set_caption("Asteroids")
@@ -38,6 +44,9 @@ class GUI:
         self.__font_size = 32
         self.__font = pg.freetype.Font(self.__font_path, self.__font_size)
         self.__font_color = (255, 255, 255)
+
+        self.__WIDTH = WIDTH
+        self.__HEIGHT = HEIGHT
 
         # lives image setup
         self.__lives_image = pg.image.load(os.path.join('Assets/Player', 'Player_idle.png')).convert_alpha()
@@ -76,7 +85,7 @@ class GUI:
         dimensions = self.__font.get_rect(Text)
         scoreDimensions = self.__font.get_rect(ScoreText)
 
-        self.__font.render_to(screen, ((800 - dimensions.width) // 2, (800 - dimensions.height) // 2), Text,
+        self.__font.render_to(screen, ((self.__WIDTH - dimensions.width) // 2, (self.__HEIGHT - dimensions.height) // 2), Text,
                               self.__font_color, None, size=self.__font_size)
-        self.__font.render_to(screen, ((800 - scoreDimensions.width) // 2, ((800 - scoreDimensions.height) // 2)
+        self.__font.render_to(screen, ((self.__WIDTH - scoreDimensions.width) // 2, ((self.__HEIGHT - scoreDimensions.height) // 2)
                                        - 50), ScoreText, self.__font_color, None, size=self.__font_size)

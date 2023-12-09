@@ -113,6 +113,7 @@ class Player(pg.sprite.Sprite):
         radians = math.radians(self.__angle)
         vertical = math.cos(radians) * self.__vel
         horizontal = math.sin(radians) * self.__vel
+
         self.__rect.x -= horizontal
         self.__rect.y -= vertical
 
