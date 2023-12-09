@@ -1,3 +1,4 @@
+""" Michael Melei, Justin Burch"""
 from Asteroid import Asteroid
 
 class AsteroidMedium(Asteroid):

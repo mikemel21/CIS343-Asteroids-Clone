@@ -1,3 +1,4 @@
+""" Michael Melei, Justin Burch"""
 import math
 import random
 import pygame as pg

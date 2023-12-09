@@ -1,3 +1,4 @@
+""" Michael Melei, Justin Burch"""
 import pygame as pg
 from pygame import freetype
 import os

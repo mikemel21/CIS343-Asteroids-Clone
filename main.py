@@ -1,5 +1,4 @@
-""" Michael Melei, Justin Burch
-"""
+""" Michael Melei, Justin Burch"""
 import random
 import pygame as pg
 import pygame.freetype

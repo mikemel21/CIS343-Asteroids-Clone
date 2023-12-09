@@ -1,3 +1,4 @@
+""" Michael Melei, Justin Burch"""
 class GameManager:
     """Class representing the Game Manager
 
