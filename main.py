@@ -1,3 +1,5 @@
+""" Michael Melei, Justin Burch
+"""
 import random
 import time
 
@@ -44,13 +46,16 @@ def main():
     projectiles = pg.sprite.Group()
     # Asteroid Sprite Group
     asteroids = pg.sprite.Group()
+    print(player.__doc__)
 
     # spawn starter asteroids
-    asteroidBig = AsteroidLarge()
-    asteroidBig2 = AsteroidLarge()
-    asteroidBig3 = AsteroidLarge()
+    asteroidBig = AsteroidLarge(random.randint(0, 800), random.randint(0, 800))
+    asteroidBig2 = AsteroidLarge(random.randint(0, 800), random.randint(0, 800))
+    asteroidBig3 = AsteroidLarge(random.randint(0, 800), random.randint(0, 800))
     asteroids.add(asteroidBig, asteroidBig2, asteroidBig3)
-    asteroidOptions = [AsteroidLarge(), AsteroidMedium(), AsteroidSmall()]
+    asteroidOptions = [AsteroidLarge(random.randint(0, 800), random.randint(0, 800)),
+                       AsteroidMedium(random.randint(0, 800), random.randint(0, 800)),
+                       AsteroidSmall(random.randint(0, 800), random.randint(0, 800))]
 
     playerCollided = False
     playerResetTimer = 0
@@ -78,9 +83,9 @@ def main():
                     playerMoving = True
                     player.forward()
                 if keys[pg.K_a]:
-                    player.rotate(screen, "left")
+                    player.rotate("left")
                 if keys[pg.K_d]:
-                    player.rotate(screen, "right")
+                    player.rotate("right")
                 if keys[pg.K_SPACE]:
                     if shotDelta >= shootDelay:
                         # play shoot sound
@@ -137,7 +142,7 @@ def main():
 
             # update
             if player:
-                player.update(delta)
+                player.update()
             asteroids.update()
             projectiles.update()
 

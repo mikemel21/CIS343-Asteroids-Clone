@@ -1,9 +1,18 @@
 from Asteroid import Asteroid
 
 class AsteroidMedium(Asteroid):
-    def __init__(self):
-        # super(AsteroidLarge, self).__init__()
-        super().__init__(96)
+    """Represents a medium asteroid
+
+    This class inherits from the Asteroid class.
+    """
+    def __init__(self, x, y):
+        """Initializes a medium asteroid.
+
+        Parameters:
+            x (int): Initial x-coordinate.
+            y (int): Initial y-coordinate.
+        """
+        super().__init__(96, x, y)
 
     def update(self):
         super().update()

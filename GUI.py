@@ -4,7 +4,29 @@ import os
 
 
 class GUI:
+    """ Represents the game GUI.
+
+    Handles the logic for graphically displaying and updating the player's score and lives. It also handles the Game
+        Over screen.
+
+    Attributes:
+        gm (GameManager): The GameManager instance in order to display the current score and lives.
+        __font_path (string): Stores the path to the GUI text font.
+        __font_size (int): Stores the size of the font.
+        __font (Font): Stores the font the GUI will use.
+        __font_color (tuple): Stores the RGB value of the color of the font.
+
+    Methods:
+        __init__(gamemanager): Initialize the GUI
+        draw_score(screen): Displays the score at the top left of the screen.
+        draw_lives(screen): Displays the player's lives directly under the score.
+        game_over(screen): Displays the "game over" display when the player dies.
+    """
     def __init__(self, gamemanager):
+        """ Initializes the GUI
+
+        :param gamemanager: The Gamemanager instance in order to display the current score and lives.
+        """
         pg.freetype.init()
         pg.display.set_caption("Asteroids")
         pg.display.set_icon(pg.image.load(os.path.join("Assets", "icon.jpg")))
@@ -32,7 +54,9 @@ class GUI:
 
     def draw_lives(self, screen):
         """Displays the player's amount of lives directly under the score
+
         Lives are displayed as a certain number of ship icons
+
         :param screen: main game window
         """
 
@@ -44,9 +68,11 @@ class GUI:
             i += 1
 
     def game_over(self, screen):
-        """Displays a game over screen
+        """Displays the "game over" display when the player dies.
         :param screen: main game window
         """
         Text = "Game Over"
+        ScoreText = "Score " + self.gm
         dimensions = self.__font.get_rect(Text)
-        self.__font.render_to(screen, ((800-dimensions.width) // 2, (800 - dimensions.height) // 2), Text, self.__font_color, None, size=self.__font_size)
+        self.__font.render_to(screen, ((800-dimensions.width) // 2, (800 - dimensions.height) // 2), Text,
+                              self.__font_color, None, size=self.__font_size)

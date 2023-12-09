@@ -6,13 +6,37 @@ class Player(pg.sprite.Sprite):
     """ Class representing the Player
 
     Holds the logic pertaining to Player transform, sprite image, movement, rotation, health, and controls
+
+    Attributes:
+        __angle (float): The rotation of the player.
+        __vel (float): The player's velocity.
+        __accel (float): The acceleration factor applied to the player.
+        __max_vel (float): The maximum velocity of the player.
+        __rotation_vel (float): The velocity in which the player rotates.
+        __image (pg.Surface): The image representing the player.
+        __rect (pg.Rect): The rectangular box for the player's image.
+        __playerMask (pg.mask.Mask): The Mask for the collision detection of the player.
+
+    Properties:
+        image (pg.Surface): The read-only property for accessing the player's image.
+        angle (float): The read-only property for accessing the player's current angle.
+        rect (pg.Rect): The read-only property for accessing the player's bounding box.
+        playerMask (pg.mask.Mask): The read-only property for accessing the player's mask for the collision detection
+            of the player.
+
+    Methods:
+        __init__(): Initialize the player
+        __blit_rotate(screen, top_left, playerAngle): Rotates the image around the center axis
+        forward(): Move the player forward
+        decelerate(): Gradually reduce the player speed when player stops moving forward
+        rotate(): Change the player's angle based on key press.
+        update(): Check the player's coordinates. If the player is off the screen, wrap the position to the
+            opposite side.
     """
     def __init__(self):
         super(Player, self).__init__()
 
-        # self.lives = 3
-        self.score = 0
-        self.angle = 0.0
+        self.__angle = 0.0
         self.__vel = 0.0
         self.__accel = 0.1
         self.__max_vel = 4.0
@@ -28,32 +52,30 @@ class Player(pg.sprite.Sprite):
         self.__rect.centery = 400
         self.__playerMask = pg.mask.from_surface(self.__image)
 
-    # @property
-    # def lives(self):
-    #     return self.__lives
     @property
     def image(self):
+        """The read-only property for accessing the player's image."""
         return self.__image
     @property
     def angle(self):
+        """The read-only property for accessing the player's current angle."""
         return self.__angle
     @property
     def rect(self):
+        """The read-only property for accessing the player's bounding box."""
         return self.__rect
     @property
     def playerMask(self):
+        """The read-only property for accessing the player's mask for the collision detection of the player."""
         return self.__playerMask
-
-    @angle.setter
-    def angle(self, newAngle):
-        self.__angle = newAngle
 
     def __blit_rotate(self, screen, top_left, playerAngle):
         """ rotate player image around center axis
 
-        :param screen: The game window; where the player should be drawn
-        :param top_left: Top left of the player rect
-        :param playerAngle: The angle the player will be rotated to
+        Args:
+            screen (pg.Surface): The game window; where the player should be drawn
+            top_left (tuple): Top left of the player rect
+            playerAngle (float): The angle the player will be rotated to
         """
         # rotate original image
         rotatedImage = pg.transform.rotate(self.__image, playerAngle)
@@ -62,15 +84,16 @@ class Player(pg.sprite.Sprite):
         screen.blit(rotatedImage, new_rect.topleft)
 
     def draw (self, screen):
+        """Draws the player on the specified screen
+
+        Parameter:
+            screen (pg.Surface): The screen where the player will be drawn.
+        """
         # redraw player
         self.__blit_rotate(screen, (self.__rect.x, self.__rect.y), self.__angle)
 
     def forward(self):
-        """ Move player forward
-
-        :param
-            delta: ensures movement speed is independent from FPS
-        """
+        """Move player forward"""
         self.__vel = min(self.__vel + self.__accel, self.__max_vel)
         # convert angle to radians
         radians = math.radians(self.angle)
@@ -83,9 +106,7 @@ class Player(pg.sprite.Sprite):
         self.__rect.y -= vertical
 
     def decelerate(self):
-        """
-        gradually reduce player speed when not moving
-        """
+        """ gradually reduce player speed when not moving"""
         # decelerate until vel is 0
         self.__vel = max(self.__vel - self.__accel/2, 0)
 
@@ -95,11 +116,11 @@ class Player(pg.sprite.Sprite):
         self.__rect.x -= horizontal
         self.__rect.y -= vertical
 
-    def rotate(self, screen, rotDir: str):
-        """ Change angle player will rotate to based on key press
+    def rotate(self, rotDir: str):
+        """ Change player angle based on key press
 
-        :param screen: Game window
-        :param rotDir: direction to rotate
+        Args:
+            rotDir (str): direction to rotate
         """
         # rotate left
         if rotDir == "left":
@@ -108,7 +129,8 @@ class Player(pg.sprite.Sprite):
         elif rotDir == "right":
             self.__angle -= self.__rotation_vel
 
-    def update(self, delta):
+    def update(self):
+        """Check the player's coordinates. If the player is off the screen, wrap the position to the opposite side."""
         if self.rect.x > 800:
             self.rect.x = 0
         if self.rect.y > 800:
