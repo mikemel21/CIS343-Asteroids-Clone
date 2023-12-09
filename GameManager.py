@@ -3,7 +3,7 @@ class GameManager:
 
     Manages the player's score and lives.
     """
-    def __init__(self, lives=1, score=0):
+    def __init__(self, lives=3, score=0):
         self.lives = lives
         self.score = score
 
@@ -19,7 +19,7 @@ class GameManager:
         self.score += points
 
     def checkLives(self):
-        if self.lives <= 0:
+        if self.lives == 0:
             return 1
 
     '''

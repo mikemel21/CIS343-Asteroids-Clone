@@ -72,7 +72,11 @@ class GUI:
         :param screen: main game window
         """
         Text = "Game Over"
-        ScoreText = "Score " + self.gm
+        ScoreText = "Score " + str(self.gm.score)
         dimensions = self.__font.get_rect(Text)
-        self.__font.render_to(screen, ((800-dimensions.width) // 2, (800 - dimensions.height) // 2), Text,
+        scoreDimensions = self.__font.get_rect(ScoreText)
+
+        self.__font.render_to(screen, ((800 - dimensions.width) // 2, (800 - dimensions.height) // 2), Text,
                               self.__font_color, None, size=self.__font_size)
+        self.__font.render_to(screen, ((800 - scoreDimensions.width) // 2, ((800 - scoreDimensions.height) // 2)
+                                       - 50), ScoreText, self.__font_color, None, size=self.__font_size)
