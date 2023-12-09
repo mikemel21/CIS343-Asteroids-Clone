@@ -14,6 +14,3 @@ class AsteroidLarge(Asteroid):
             y (int): Initial y-coordinate.
         """
         super().__init__(160, x, y)
-
-    def update(self):
-        super().update()

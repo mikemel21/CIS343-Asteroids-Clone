@@ -46,11 +46,10 @@ class Asteroid(pg.sprite.Sprite):
         self.__rect = self.__image.get_rect()
         self.__asteroidMask = pg.mask.from_surface(self.__image)
 
-        self.__rect.x = x
-        self.__rect.y = y
+        self.__rect.center = (x, y)
+        self.__dirX = random.uniform(-1, 1)
+        self.__dirY = random.uniform(-1, 1)
 
-        # self.__rect.x = random.randint(-5, 805)
-        # self.__rect.y = random.randint(-5, 805)
         self.__speed = random.randint(1, 3)
 
     @property
@@ -92,5 +91,5 @@ class Asteroid(pg.sprite.Sprite):
 
     def update(self):
         """Update the position of the asteroid."""
-        self.__rect.x += self.__speed
-        self.__rect.y += self.__speed
+        self.__rect.x += self.__dirX * self.__speed
+        self.__rect.y += self.__dirY * self.__speed

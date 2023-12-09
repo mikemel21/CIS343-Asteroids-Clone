@@ -16,7 +16,7 @@ from AsteroidSmall import AsteroidSmall
 from GameManager import GameManager
 
 # Window Size
-WIDTH, HEIGHT = 800, 800
+WIDTH, HEIGHT = 1000, 1000
 
 # Game States
 PLAYING = 0
@@ -46,16 +46,15 @@ def main():
     projectiles = pg.sprite.Group()
     # Asteroid Sprite Group
     asteroids = pg.sprite.Group()
-    print(player.__doc__)
 
     # spawn starter asteroids
-    asteroidBig = AsteroidLarge(random.randint(0, 800), random.randint(0, 800))
-    asteroidBig2 = AsteroidLarge(random.randint(0, 800), random.randint(0, 800))
-    asteroidBig3 = AsteroidLarge(random.randint(0, 800), random.randint(0, 800))
+    asteroidBig = AsteroidLarge(random.randint(0, WIDTH), random.randint(0, HEIGHT))
+    asteroidBig2 = AsteroidLarge(random.randint(0, WIDTH), random.randint(0, HEIGHT))
+    asteroidBig3 = AsteroidLarge(random.randint(0, WIDTH), random.randint(0, HEIGHT))
     asteroids.add(asteroidBig, asteroidBig2, asteroidBig3)
-    asteroidOptions = [AsteroidLarge(random.randint(0, 800), random.randint(0, 800)),
-                       AsteroidMedium(random.randint(0, 800), random.randint(0, 800)),
-                       AsteroidSmall(random.randint(0, 800), random.randint(0, 800))]
+    asteroidOptions = [AsteroidLarge,
+                       AsteroidMedium,
+                       AsteroidSmall]
 
     playerCollided = False
     playerResetTimer = 0
@@ -64,7 +63,9 @@ def main():
     delta = 0
     shotDelta = 500
     shootDelay = 0.25
-    spawnTimer = 1
+    spawnTimer = 1000
+    asteroid_spawn = pygame.USEREVENT + 1
+    pg.time.set_timer(asteroid_spawn, spawnTimer)
     FPS = 60
     clock.tick(FPS)
     STATE = PLAYING
@@ -73,6 +74,10 @@ def main():
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 run = False
+            if event.type == asteroid_spawn:
+                asteroid_class = random.choice(asteroidOptions)
+                asteroid = asteroid_class(random.randint(0, WIDTH), random.randint(0, HEIGHT))
+                asteroids.add(asteroid)
 
         if STATE == PLAYING:
             # player movement
@@ -99,11 +104,12 @@ def main():
                 if not playerMoving:
                     player.decelerate()
 
-            spawnTimer -= delta
-            if spawnTimer <= 0:
-                asteroid = random.choice(asteroidOptions)
-                asteroids.add(asteroid)
-                spawnTimer = 2
+            # spawnTimer -= delta
+            # if spawnTimer <= 0:
+            #     asteroid = random.choice(asteroidOptions)
+            #     print(str(asteroid.rect.x) + " X " + str(asteroid.rect.y))
+            #     asteroids.add(asteroid)
+            #     spawnTimer = 2
 
             # check for collisions between player and asteroid
             if player and pg.sprite.spritecollide(player, asteroids, False) and not playerCollided:

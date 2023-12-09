@@ -13,6 +13,3 @@ class AsteroidMedium(Asteroid):
             y (int): Initial y-coordinate.
         """
         super().__init__(96, x, y)
-
-    def update(self):
-        super().update()
