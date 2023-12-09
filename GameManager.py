@@ -19,7 +19,7 @@ class GameManager:
         self.score += points
 
     def checkLives(self):
-        if self.lives == 0:
+        if self.lives == 1:
             return 1
 
     '''
